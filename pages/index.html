@@ -4,17 +4,15 @@
     <title>GiAntz - A Solution to Small Stores!</title>
     <style>
         body {
-            background-image: url('C:\Users\daddy\OneDrive\Documents\WORK\MerchAntz\GiAntz\images\background.jpg');
-            background-repeat: no-repeat;
-            background-size: cover;
-            background-blur: 10px;
+            background: linear-gradient(to bottom, black, yellow);
             margin: 0;
             padding: 0;
+            color: white;
         }
 
         .header {
-            background: linear-gradient(yellow, black);
-            color: white;
+            background: linear-gradient(black, yellow);
+            color: black;
             text-align: center;
             padding: 20px;
             display: flex;
@@ -70,6 +68,7 @@
 
         .container {
             display: flex;
+            flex-wrap: wrap;
             justify-content: center;
             align-items: center;
             height: 100vh;
@@ -83,6 +82,7 @@
             margin: 10px;
             cursor: pointer;
             transition: transform 0.2s, box-shadow 0.2s;
+            text-align: center;
         }
 
         .item:hover {
@@ -96,7 +96,11 @@
         }
 
         .item p {
-            text-align: center;
+            margin-top: 10px;
+        }
+
+        .item.selected {
+            background-color: yellow;
         }
 
         .number-selector {
@@ -124,32 +128,35 @@
         }
 
         .box p {
-            color: white;
+            color: black;
             font-weight: bold;
+            margin-bottom: 10px;
         }
 
         .fee {
-            margin-top: 20px;
             text-align: center;
             font-weight: bold;
             color: red;
+            margin-top: 10px;
+            margin-bottom: 10px;
         }
 
         .risk-disclaimer {
-            margin-top: 20px;
             text-align: center;
             font-weight: bold;
             color: red;
+            margin-top: 10px;
+            margin-bottom: 10px;
         }
 
         .share-links {
-            margin-top: 20px;
             text-align: center;
+            margin-top: 20px;
         }
 
         .share-links a {
             margin: 0 5px;
-            color: white;
+            color: black;
             text-decoration: none;
         }
 
@@ -183,7 +190,7 @@
     </div>
 
     <div class="container">
-        <div class="item" id="item1">
+        <div class="item" id="item1" onclick="selectItem(1)">
             <img src="C:\Users\daddy\OneDrive\Documents\WORK\MerchAntz\GiAntz\images\MetalTableMW.jpg" alt="Item 1">
             <p>Item 1</p>
             <div class="share-links">
@@ -192,123 +199,139 @@
             </div>
         </div>
 
-        <div class="item" id="item2">
+        <div class="item" id="item2" onclick="selectItem(2)">
             <img src="C:\Users\daddy\OneDrive\Documents\WORK\MerchAntz\GiAntz\images\SolidWoodTableMW.jpg" alt="Item 2">
             <p>Item 2</p>
             <div class="share-links">
                 <a href="https://twitter.com/intent/tweet?url=https%3A%2F%2Fexample.com%2Fbet&amp;text=I%20just%20placed%20a%20bet%20on%20Item%202%20at%20GiAntz%20DApp!%20Join%20me%20and%20try%20your%20luck%20too!%20%23GiAntz" target="_blank">Share on Twitter</a>
                 <a href="https://www.facebook.com/sharer/sharer.php?u=https%3A%2F%2Fexample.com%2Fbet" target="_blank">Share on Facebook</a>
             </div>
-        </div> </div>
+        </div>
+    </div>
+    <div class="number-selector">
+        <label for="cakeDeposit">Number of CAKE deposits (up to 1000):</label>
+        <input type="number" id="cakeDeposit" min="0" max="1000" step="1">
+        <button onclick="placeBet()">Place Bet</button>
+    </div>
 
-<div class="number-selector">
-    <label for="cakeDeposit">Number of CAKE deposits (up to 10):</label>
-    <input type="number" id="cakeDeposit" min="0" max="10" step="1">
-    <button onclick="placeBet()">Place Bet</button>
-</div>
+    <div class="box">
+        <p>Bet placements with CAKE</p>
+        <div id="betPlacements"></div>
+    </div>
 
-<div class="box">
-    <p>Bet placements with CAKE</p>
-    <div id="betPlacements"></div>
-</div>
+    <div class="fee">
+        <p>Note: A 3% fee will be taken from your deposit.</p>
+    </div>
 
-<div class="fee">
-    <p>Note: A 3% fee will be taken from  your deposit.</p>
-</div>
+    <div class="risk-disclaimer">
+        <p>You are depositing tokens to a smart contract. Use this bet platform at your own risk. DYOR!</p>
+    </div>
 
-<div class="risk-disclaimer">
-    <p>You are depositing tokens to a smart contract. Use this bet platform at your own risk. DYOR!</p>
-</div>
+    <script src="https://cdn.jsdelivr.net/npm/web3@1.3.4/dist/web3.min.js"></script>
+    <script>
+        const contractAddress = 'YOUR_CONTRACT_ADDRESS'; // Replace with your smart contract address
 
-<script src="https://cdn.jsdelivr.net/npm/web3@1.3.4/dist/web3.min.js"></script>
-<script>
-    const contractAddress = 'YOUR_CONTRACT_ADDRESS'; // Replace with your smart contract address
+        let web3;
+        let contractInstance;
+        let selectedItem = null;
 
-    let web3;
-    let contractInstance;
-
-    function connectWallet() {
-        if (typeof web3 !== 'undefined') {
-            web3 = new Web3(web3.currentProvider);
-        } else {
-            alert('No web3 provider detected. Please install MetaMask or Trust Wallet to use this DApp.');
-            return;
-        }
-
-        contractInstance = new web3.eth.Contract(contractABI, contractAddress);
-
-        // Check if the user is already connected to a wallet
-        web3.eth.getAccounts().then(function(accounts) {
-            if (accounts.length > 0) {
-                alert('You are already connected to a wallet.');
+        function connectWallet() {
+            if (typeof web3 !== 'undefined') {
+                web3 = new Web3(web3.currentProvider);
+            } else {
+                alert('No web3 provider detected. Please install MetaMask or Trust Wallet to use this DApp.');
                 return;
             }
 
-            // Request the user to connect with Trust Wallet
-            web3.currentProvider.sendAsync({
-                method: 'wallet_requestPermissions',
-                params: [{
-                    eth_accounts: {}
-                }],
-                jsonrpc: '2.0',
-                id: 1
-            }, function(error, response) {
-                if (error) {
-                    alert('An error occurred while connecting with Trust Wallet.');
-                    console.error(error);
-                } else {
-                    const accounts = response.result.accounts;
+            contractInstance = new web3.eth.Contract(contractABI, contractAddress);
 
-                    if (accounts && accounts.length > 0) {
-                        alert('Successfully connected with Trust Wallet.');
+            // Check if the user is already connected to a wallet
+            web3.eth.getAccounts().then(function(accounts) {
+                if (accounts.length > 0) {
+                    alert('You are already connected to a wallet.');
+                    return;
+                }
+
+                // Request the user to connect with Trust Wallet
+                web3.currentProvider.sendAsync({
+                    method: 'wallet_requestPermissions',
+                    params: [{
+                        eth_accounts: {}
+                    }],
+                    jsonrpc: '2.0',
+                    id: 1
+                }, function(error, response) {
+                    if (error) {
+                        alert('An error occurred while connecting with Trust Wallet.');
+                        console.error(error);
+                    } else {
+                        const accounts = response.result.accounts;
+
+                        if (accounts && accounts.length > 0) {
+                            alert('Successfully connected with Trust Wallet.');
+
+                            // Update the UI or trigger any required actions
+                        }
+                    }
+                });
+            });
+        }
+
+        function placeBet() {
+            const cakeDeposit = document.getElementById("cakeDeposit").value;
+            const amountInWei = web3.utils.toWei(cakeDeposit, 'ether');
+
+            if (cakeDeposit > 0) {
+                // Calculate the fee amount
+                const feeAmount = Math.ceil(amountInWei * 0.03);
+
+                // Calculate the deposit amount after deducting the fee
+                const depositAmount = amountInWei - feeAmount;
+
+                // Call your smart contract's function to handle the bet placement
+                contractInstance.methods.placeBet(depositAmount).send({ value: depositAmount })
+                    .on('transactionHash', function(hash) {
+                        console.log('Transaction hash:', hash);
 
                         // Update the UI or trigger any required actions
-                    }
-                }
-            });
+                    })
+                    .on('error', function(error) {
+                        console.error('An error occurred during the bet placement:', error);
+                    });
+            }
+        }
+
+        function toggleDrawer() {
+            const drawer = document.getElementById('drawer');
+            drawer.classList.toggle('open');
+        }
+
+        function selectItem(itemNumber) {
+            const item = document.getElementById(`item${itemNumber}`);
+
+            if (selectedItem) {
+                selectedItem.classList.remove('selected');
+            }
+
+            item.classList.add('selected');
+            selectedItem = item;
+
+            // Show message
+            const message = document.getElementById('betPlacements');
+            message.textContent = 'BET ON THIS ITEM';
+        }
+
+        document.getElementById('connectWalletButton').addEventListener('click', connectWallet);
+
+        // Highlight the active menu item
+        const menuItems = document.querySelectorAll('.drawer a');
+        const currentPage = window.location.href;
+
+        menuItems.forEach(function(item) {
+            if (item.href === currentPage) {
+                item.classList.add('active');
+            }
         });
-    }
-
-    function placeBet() {
-        const cakeDeposit = document.getElementById("cakeDeposit").value;
-        const amountInWei = web3.utils.toWei(cakeDeposit, 'ether');
-
-        if (cakeDeposit > 0) {
-            // Calculate the fee amount
-            const feeAmount = Math.ceil(amountInWei * 0.03);
-
-            // Calculate the deposit amount after deducting the fee
-            const depositAmount = amountInWei - feeAmount;
-
-            // Call your smart contract's function to handle the bet placement
-            contractInstance.methods.placeBet(depositAmount).send({ value: depositAmount })
-                .on('transactionHash', function(hash) {
-                    console.log('Transaction hash:', hash);
-
-                    // Update the UI or trigger any required actions
-                })
-                .on('error', function(error) {
-                    console.error('An error occurred during the bet placement:', error);
-                });
-        }
-    }
-
-    function toggleDrawer() {
-        const drawer = document.getElementById('drawer');
-        drawer.classList.toggle('open');
-    }
-
-    document.getElementById('connectWalletButton').addEventListener('click', connectWallet);
-
-    // Highlight the active menu item
-    const menuItems = document.querySelectorAll('.drawer a');
-    const currentPage = window.location.href;
-
-    menuItems.forEach(function(item) {
-        if (item.href === currentPage) {
-            item.classList.add('active');
-        }
-    });
-</script>
+    </script>
 </body>
-</html> 
+</html>
