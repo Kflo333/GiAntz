@@ -1,0 +1,314 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>GiAntz - A Solution to Small Stores!</title>
+    <style>
+        body {
+            background-image: url('C:\Users\daddy\OneDrive\Documents\WORK\MerchAntz\GiAntz\images\background.jpg');
+            background-repeat: no-repeat;
+            background-size: cover;
+            background-blur: 10px;
+            margin: 0;
+            padding: 0;
+        }
+
+        .header {
+            background: linear-gradient(yellow, black);
+            color: white;
+            text-align: center;
+            padding: 20px;
+            display: flex;
+            align-items: center;
+        }
+
+        .header h1 {
+            margin: 0;
+            flex-grow: 1;
+        }
+
+        .menu-btn {
+            cursor: pointer;
+            font-size: 20px;
+            margin-right: 10px;
+        }
+
+        .drawer {
+            position: fixed;
+            left: 0;
+            top: 0;
+            width: 250px;
+            height: 100vh;
+            background-color: black;
+            color: white;
+            padding: 20px;
+            transform: translateX(-100%);
+            transition: transform 0.3s ease-in-out;
+        }
+
+        .drawer.open {
+            transform: translateX(0);
+        }
+
+        .drawer a {
+            display: block;
+            color: white;
+            text-decoration: none;
+            margin-bottom: 10px;
+        }
+
+        .drawer a.active {
+            font-weight: bold;
+        }
+
+        .drawer .close-btn {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            color: white;
+            cursor: pointer;
+        }
+
+        .container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+        }
+
+        .item {
+            background-color: white;
+            border-radius: 8px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            padding: 20px;
+            margin: 10px;
+            cursor: pointer;
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+
+        .item:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 6px 8px rgba(0, 0, 0, 0.2);
+        }
+
+        .item img {
+            width: 200px;
+            height: 200px;
+        }
+
+        .item p {
+            text-align: center;
+        }
+
+        .number-selector {
+            text-align: center;
+            margin-top: 20px;
+        }
+
+        .number-selector input[type="number"] {
+            width: 100px;
+            padding: 5px;
+        }
+
+        .number-selector button {
+            padding: 5px 10px;
+            margin-left: 10px;
+        }
+
+        .box {
+            background-color: rgba(255, 255, 255, 0.8);
+            border-radius: 8px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            padding: 20px;
+            margin: 10px;
+            text-align: center;
+        }
+
+        .box p {
+            color: white;
+            font-weight: bold;
+        }
+
+        .fee {
+            margin-top: 20px;
+            text-align: center;
+            font-weight: bold;
+            color: red;
+        }
+
+        .risk-disclaimer {
+            margin-top: 20px;
+            text-align: center;
+            font-weight: bold;
+            color: red;
+        }
+
+        .share-links {
+            margin-top: 20px;
+            text-align: center;
+        }
+
+        .share-links a {
+            margin: 0 5px;
+            color: white;
+            text-decoration: none;
+        }
+
+        .arrows {
+            text-align: center;
+            margin-top: 20px;
+        }
+
+        .arrows img {
+            width: 30px;
+            height: 30px;
+            margin: 0 10px;
+            opacity: 0.5;
+        }
+
+        .arrows img.active {
+            opacity: 1;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <div class="menu-btn" onclick="toggleDrawer()">&#9776;</div>
+        <h1>GiAntz - A Solution to Small Stores!</h1>
+    </div>
+
+    <div class="drawer" id="drawer">
+        <div class="close-btn" onclick="toggleDrawer()">&#10006;</div>
+        <a href="#" class="active">Home</a>
+        <a href="https://www.merchant-wise.com">Merchant Wise</a>
+    </div>
+
+    <div class="container">
+        <div class="item" id="item1">
+            <img src="C:\Users\daddy\OneDrive\Documents\WORK\MerchAntz\GiAntz\images\MetalTableMW.jpg" alt="Item 1">
+            <p>Item 1</p>
+            <div class="share-links">
+                <a href="https://twitter.com/intent/tweet?url=https%3A%2F%2Fexample.com%2Fbet&amp;text=I%20just%20placed%20a%20bet%20on%20Item%201%20at%20GiAntz%20DApp!%20Join%20me%20and%20try%20your%20luck%20too!%20%23GiAntz" target="_blank">Share on Twitter</a>
+                <a href="https://www.facebook.com/sharer/sharer.php?u=https%3A%2F%2Fexample.com%2Fbet" target="_blank">Share on Facebook</a>
+            </div>
+        </div>
+
+        <div class="item" id="item2">
+            <img src="C:\Users\daddy\OneDrive\Documents\WORK\MerchAntz\GiAntz\images\SolidWoodTableMW.jpg" alt="Item 2">
+            <p>Item 2</p>
+            <div class="share-links">
+                <a href="https://twitter.com/intent/tweet?url=https%3A%2F%2Fexample.com%2Fbet&amp;text=I%20just%20placed%20a%20bet%20on%20Item%202%20at%20GiAntz%20DApp!%20Join%20me%20and%20try%20your%20luck%20too!%20%23GiAntz" target="_blank">Share on Twitter</a>
+                <a href="https://www.facebook.com/sharer/sharer.php?u=https%3A%2F%2Fexample.com%2Fbet" target="_blank">Share on Facebook</a>
+            </div>
+        </div> </div>
+
+<div class="number-selector">
+    <label for="cakeDeposit">Number of CAKE deposits (up to 10):</label>
+    <input type="number" id="cakeDeposit" min="0" max="10" step="1">
+    <button onclick="placeBet()">Place Bet</button>
+</div>
+
+<div class="box">
+    <p>Bet placements with CAKE</p>
+    <div id="betPlacements"></div>
+</div>
+
+<div class="fee">
+    <p>Note: A 3% fee will be taken from  your deposit.</p>
+</div>
+
+<div class="risk-disclaimer">
+    <p>You are depositing tokens to a smart contract. Use this bet platform at your own risk. DYOR!</p>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/web3@1.3.4/dist/web3.min.js"></script>
+<script>
+    const contractAddress = 'YOUR_CONTRACT_ADDRESS'; // Replace with your smart contract address
+
+    let web3;
+    let contractInstance;
+
+    function connectWallet() {
+        if (typeof web3 !== 'undefined') {
+            web3 = new Web3(web3.currentProvider);
+        } else {
+            alert('No web3 provider detected. Please install MetaMask or Trust Wallet to use this DApp.');
+            return;
+        }
+
+        contractInstance = new web3.eth.Contract(contractABI, contractAddress);
+
+        // Check if the user is already connected to a wallet
+        web3.eth.getAccounts().then(function(accounts) {
+            if (accounts.length > 0) {
+                alert('You are already connected to a wallet.');
+                return;
+            }
+
+            // Request the user to connect with Trust Wallet
+            web3.currentProvider.sendAsync({
+                method: 'wallet_requestPermissions',
+                params: [{
+                    eth_accounts: {}
+                }],
+                jsonrpc: '2.0',
+                id: 1
+            }, function(error, response) {
+                if (error) {
+                    alert('An error occurred while connecting with Trust Wallet.');
+                    console.error(error);
+                } else {
+                    const accounts = response.result.accounts;
+
+                    if (accounts && accounts.length > 0) {
+                        alert('Successfully connected with Trust Wallet.');
+
+                        // Update the UI or trigger any required actions
+                    }
+                }
+            });
+        });
+    }
+
+    function placeBet() {
+        const cakeDeposit = document.getElementById("cakeDeposit").value;
+        const amountInWei = web3.utils.toWei(cakeDeposit, 'ether');
+
+        if (cakeDeposit > 0) {
+            // Calculate the fee amount
+            const feeAmount = Math.ceil(amountInWei * 0.03);
+
+            // Calculate the deposit amount after deducting the fee
+            const depositAmount = amountInWei - feeAmount;
+
+            // Call your smart contract's function to handle the bet placement
+            contractInstance.methods.placeBet(depositAmount).send({ value: depositAmount })
+                .on('transactionHash', function(hash) {
+                    console.log('Transaction hash:', hash);
+
+                    // Update the UI or trigger any required actions
+                })
+                .on('error', function(error) {
+                    console.error('An error occurred during the bet placement:', error);
+                });
+        }
+    }
+
+    function toggleDrawer() {
+        const drawer = document.getElementById('drawer');
+        drawer.classList.toggle('open');
+    }
+
+    document.getElementById('connectWalletButton').addEventListener('click', connectWallet);
+
+    // Highlight the active menu item
+    const menuItems = document.querySelectorAll('.drawer a');
+    const currentPage = window.location.href;
+
+    menuItems.forEach(function(item) {
+        if (item.href === currentPage) {
+            item.classList.add('active');
+        }
+    });
+</script>
+</body>
+</html> 
